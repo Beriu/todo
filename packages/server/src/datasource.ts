@@ -2,7 +2,7 @@ import { Todo } from "./models/Todo";
 import { DataSource } from "typeorm";
 import { URL } from "url";
 
-const databaseUrl = 'postgresql://app:0rd_G9Hu3qr2tM64sCh4og@redkorp-main-2757.7tc.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full';
+const databaseUrl = process.env.DATABASE_URL;
 
 if(!databaseUrl) throw new Error('Set the DATABASE_URL variable in your env file.');
 
