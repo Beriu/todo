@@ -1,0 +1,68 @@
+:root {
+  --border-radius-default: 5px;
+
+  font-family: 'Overpass', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-size: 18px;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+button, input[type='checkbox'] {
+  cursor: pointer;
+}
+
+input[type='checkbox'] {
+  transform: scale(1.5);
+}
+
+textarea {
+  font: inherit;
+}
+
+input[type='text'] {
+  padding: .5rem .25rem;
+  border-radius: var(--border-radius-default);
+  border-style: solid;
+  border: none;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+#app {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  grid-template-columns: 1fr minmax(400px, 700px) 1fr;
+}
+
+
+
+$colors: (
+  "error":   #C16E70, 
+  "info":    #456990, 
+  "warning": #FBB13C,
+  "success": #06D6A0,
+  "primary": #2F4858,
+);
+
+@mixin color-utils {
+  @each $color, $value in $colors {
+      .bg-#{$color} { background-color: $value; };
+      .text-#{$color} { color: $value; };
+  }
+}
+
+@include color-utils;

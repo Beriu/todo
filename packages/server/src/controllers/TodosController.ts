@@ -49,7 +49,7 @@ export default class TodoController {
             const { affected } = await this.todoRepository.update({ id }, dto);
             
             if(affected && affected > 0) {
-                res.json(await this.todoRepository.find({ where: { id }}));
+                res.json(await this.todoRepository.findOne({ where: { id }}));
                 return;
             }
             res.status(400).json({ error: 'No updates performed' });

@@ -2,6 +2,7 @@ import "reflect-metadata";
 import express from "express";
 import { db } from "./datasource";
 import router from "./routes";
+import cors from "cors";
 
 async function startServer() {
     
@@ -10,6 +11,8 @@ async function startServer() {
     const server = express();
 
     await db.initialize();
+
+    server.use(cors());
 
     server.use(express.json());
 
