@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import type { Todo } from "../types"
 
 const props = defineProps<{ todo: Todo, isDisabled: boolean }>();
-
 const emit = defineEmits<{ (e: 'toggle', dto: Todo): void }>();
+
+const controlsVissibility = ref(false);
 
 const toggle = (isCompleted: boolean) => {
     emit('toggle', { id: props.todo.id, content: props.todo.content, isCompleted });
@@ -12,7 +14,11 @@ const toggle = (isCompleted: boolean) => {
 </script>
 
 <template>
-    <div :class="{ disabled: isDisabled }" class="body">
+    <div
+    @mouseenter="controlsVissibility = true"
+    @mouseleave="controlsVissibility = false"
+    :class="{ disabled: isDisabled }" 
+    class="body">
         <div class="prepend">
             <slot name="prepend">
                 <input 
@@ -27,7 +33,7 @@ const toggle = (isCompleted: boolean) => {
                 <span :class="{ 'strike': todo.isCompleted }">{{  todo.content }}</span>
             </slot>
         </div>
-        <div class="append">
+        <div v-show="controlsVissibility" class="append">
             <slot name="append" :todo="todo"></slot>
         </div>
     </div>
@@ -49,13 +55,12 @@ const toggle = (isCompleted: boolean) => {
         .content {
             flex-grow: 1;
             display: block;
-            width: 20ch;
             overflow-wrap: break-word;
         }
 
         .append {
-            flex-grow: 0;
             display: flex;
+            flex-grow: 0;
             flex-direction: row;
             gap: .5rem;
         }

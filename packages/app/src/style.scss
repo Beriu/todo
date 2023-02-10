@@ -6,7 +6,7 @@
   font-weight: 400;
   font-size: 18px;
 
-  color-scheme: light dark;
+  color-scheme: dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
 
@@ -20,6 +20,13 @@
 
 button, input[type='checkbox'] {
   cursor: pointer;
+}
+
+button {
+  border-radius: var(--border-radius-default);
+  border: none;
+  text-transform: uppercase;
+  padding: 2.5px 5px;
 }
 
 input[type='checkbox'] {
