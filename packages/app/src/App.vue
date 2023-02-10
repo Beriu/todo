@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import e from 'cors';
-import { reactive, ref, inject, onMounted, Ref } from 'vue';
+import { reactive, ref, inject, onMounted } from 'vue';
 import Todo from './components/Todo.vue';
 import TodoForm from './forms/TodoForm.vue';
 import type TodoRepository from './repositories/TodoRepository';
@@ -9,7 +8,7 @@ import type { Todo as TodoType } from "./types";
 const currentDisabledIds = reactive<Set<string>>(new Set());
 const inEditingIds = reactive<Set<string>>(new Set());
 const todos = ref<Map<string, TodoType>>(new Map());
-const todoRefs = new Map();
+
 const todosRepo = inject<TodoRepository>('todosRepository')!;
 
 onMounted(async () => {
@@ -36,12 +35,9 @@ const checkTodo = async (dto: TodoType) => {
     }
 };
 
-const editTodo = async (dto: TodoType) => {
-    inEditingIds.add(dto.id);
-    const el = todoRefs.get(dto.id);
-};
-
 const updateTodo = async (dto: TodoType) => {
+    if(dto.content.length > 65) return;
+
     if(currentDisabledIds.has(dto.id)) return;
     currentDisabledIds.add(dto.id);
 
@@ -73,10 +69,9 @@ const createTodo = async (content: string) => {
 
                 <template v-if="inEditingIds.has(key)" #default>
                     <textarea
-                        :ref="(el) => todoRefs.set(todo.id, el)"
                         v-model="todo.content"
                         class="todo_editbox" 
-                        :class="{ warning: todo.content.length > 65 }">
+                        :class="{ 'text-error': todo.content.length > 65 }">
                     </textarea>
                 </template>
 
@@ -87,7 +82,7 @@ const createTodo = async (content: string) => {
                     </template>
 
                     <template v-else>
-                        <button class="bg-primary" @click="editTodo(todo)">edit</button>
+                        <button class="bg-primary" @click="inEditingIds.add(todo.id);">edit</button>
                         <button class="bg-error" @click="deleteTodo(todo.id)">delete</button>
                     </template>
                 </template>
@@ -98,12 +93,14 @@ const createTodo = async (content: string) => {
 
 <style scoped lang="scss">
     main {
-        min-width: 350px;
+        width: 100%;
         display: flex;
         flex-direction: column;
 
-        grid-column-start: 2;
-        grid-column-end: 3;
+        @media only screen and (min-width: 500px) {
+            grid-column-start: 2;
+            grid-column-end: 3;
+        }
 
         section {
             display: flex;
@@ -114,6 +111,8 @@ const createTodo = async (content: string) => {
                 border: none;
                 outline: none;
                 border-color: Transparent;
+                resize: none;
+                border-bottom: 1px dotted grey;
             }
         }
     }
